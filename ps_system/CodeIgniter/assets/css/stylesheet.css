@@ -1,0 +1,62 @@
+.form_head
+{
+	border-bottom: 5px solid #00b359;
+	height: 90px;
+	padding-top: 5px;
+	margin-bottom: 20px;
+}
+.btn_head
+{
+	border-radius: 5px;
+	font-weight: bold;
+	font-size: 18px;
+	margin-top: 20px;
+	padding: 5px 20px;
+	text-align: center;
+}
+.btn_submit
+{
+	width: 145px;
+	font-weight: bold;
+	font-size: 18px;
+}
+.reg_form
+{
+	padding-top: 30px;
+}
+.profile_pic
+{
+	height: 200px;
+	width:200px;
+}
+.col_profil_pic
+{
+	padding-top: 50px;
+}
+.error_class
+{
+	color: #ff0000;
+	font-size: 12px;
+}
+.error
+{
+	 border:2px solid red;
+}
+tr
+{
+	height: 30px;
+	text-align: center;
+}
+th
+{
+	height: 30px;
+	text-align: center;
+}
+.table_div
+{
+	height: 200px;
+}
+.form-gp
+{
+	height:35px;
+}
