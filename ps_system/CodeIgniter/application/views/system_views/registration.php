@@ -1,31 +1,30 @@
 <!-- Main body of the page -->
-	<div class="container-fluid">
-		<div class="col-md-6 col-md-offset-3">	
-			<!-- Page header -->
-			<div class="form_head text-center">
-				<h1>Registration Form</h1>
-			</div>	
-			<!-- Registration form -->	
-			<?php echo form_open('registration/validate_user');
-      ?>
-          <div class="form-group">
-   					<label for="first name" class="col-md-4 control-label text-right">First name:</label>
-   					<div class="col-md-8">
+<div class="container-fluid">
+	<div class="col-md-6 col-md-offset-3">	
+		<!-- Page header -->
+		<div class="form_head text-center">
+			<h1>Registration Form</h1>
+		</div>	
+		<!-- Registration form -->	
+		<?php echo form_open('registration/validate_user');?>
+      <div class="form-group">
+				<label for="first name" class="col-md-4 control-label text-right">First name:</label>
+					<div class="col-md-8">
     				<input type="text" class="form-control" id="first_name" name="first_name" placeholder="First name" value="<?php echo set_value('first_name'); ?>">
             <label class="col-md-8 has-error error_class">
               <?php echo form_error('first_name'); ?>
             </label>
-    				</div>
   				</div>
-  				<div class="form-group">
-   					<label for="last name" class="col-md-4 control-label text-right">Last name:</label>
-   					<div class="col-md-8">
-    				<input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name" value="<?php echo set_value('last_name'); ?>">
+			</div>
+			<div class="form-group">
+  			<label for="last name" class="col-md-4 control-label text-right">Last name:</label>
+  			<div class="col-md-8">
+     				<input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name" value="<?php echo set_value('last_name'); ?>">
             <label class="col-md-8 error_class">
              <?php echo form_error('last_name'); ?>
             </label>
-    				</div>
-  				</div>
+    		</div>
+  		</div>
   				<div class="form-group">
    					<label for="email id" class="col-md-4 control-label text-right">E-mail:</label>
    					<div class="col-md-8">

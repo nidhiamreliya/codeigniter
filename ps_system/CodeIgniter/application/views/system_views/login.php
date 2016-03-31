@@ -27,8 +27,9 @@
             </div>
   				</div>
   				<div>
-  					<label for="errors" class="col-md-8  col-md-offset-4 has-error">
-					</label>
+  					<label for="errors" class="col-md-8  col-md-offset-4 text-danger">
+              <?php echo isset($err_message) ? $err_message : '' ?>
+					   </label>
 				</div>
   				<div class="form-group form-gp ">
   					<div class="col-md-3 col-md-offset-3">
