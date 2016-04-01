@@ -17,5 +17,8 @@ class Manage_user extends CI_Controller
 	public function delete_user($remove_id)
 	{
 		$result = $this->manage_data->delete_user($remove_id);
+		$this->session->set_flashdata('success_msg', 'One row has been deleted.');
+		redirect('manage_user');
+
 	}
 }

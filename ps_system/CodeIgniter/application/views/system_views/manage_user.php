@@ -8,7 +8,7 @@
 				</div>
 				<div class="col-md-3 col-md-offset-3 text-right">
 					<ul class="nav nav-pills">
-  						<li role="presentation"><a value="Log out" class="btn-success btn_head" name="logout" href="controllers/log_out.php">Log out</a></li>
+  						<li role="presentation"><a value="Log out" class="btn-success btn_head" name="logout" href=<?php echo site_url("log_out");?>>Log out</a></li>
   						<li class="presentation"><a value="My Profile" class="btn-success btn_head"  name="myprofile" href="user_profile.php">My Profile</a></li>
 					</ul>				
 				</div>
@@ -16,7 +16,7 @@
 		</div>
 		<!-- page body -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1 table_div">
+			<div class="col-md-10 col-md-offset-1">
 				<!-- Table header -->
 				<table class="table-striped col-md-12 table-bordered table-responsive">
 						<tr>
@@ -42,11 +42,11 @@
 							<td> <?php echo $row->address_line1 ?> </td>
 							<td> <?php echo $row->address_line2 ?> </td>
 							<td> <?php echo $row->city ?> </td>
-							<td> <?php echo$row->zip_code ?> </td>
+							<td> <?php echo $row->zip_code ?> </td>
 							<td> <?php echo $row->state ?> </td>
 							<td> <?php echo $row->country ?> </td>
-							<td> <a href=<?php echo site_url("user_profile");?>>Edit</a></td>
-							<td> <a href="<?php echo base_url() ?>index.php/manage_user/delete_user/<?php echo $row->user_id ?>">Delete</a></td>
+							<td> <a href="<?php echo base_url() ?>index.php/user_profile/edit_user/<?php echo $row->user_id ?>">Edit</a></td>
+							<td> <a onclick="return confirm('Are you sure you want to delete \'<?php echo $row->first_name ?> \'?');" href="<?php echo base_url() ?>index.php/manage_user/delete_user/<?php echo $row->user_id ?>" >Delete</a></td>
 						</tr>
 					<?php endforeach ?>
 				</table>
@@ -55,10 +55,11 @@
 		<!-- Print messge on successful delete data. -->  
 		<div class="row">
 			<span class="col-md-4 col-md-offset-4 text-center text-success" >
-				<?php
-					if(isset($message))
-					{
-						echo '<strong>' . $message . '</strong>';
+				<?php 
+					if($this->session->flashdata('success_msg') != '')
+					{ 
+						$message = $this->session->flashdata('success_msg');
+						echo $message;
 					}
 				?>
 			</span>

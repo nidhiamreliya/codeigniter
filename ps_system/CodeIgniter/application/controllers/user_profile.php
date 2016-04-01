@@ -10,9 +10,24 @@ class User_profile extends CI_Controller
     }
 	public function index()
 	{
-		if($this->session->userdata('user_id'))
+		//$this->load->view('system_views/upload_form');
+		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege') == 1)
 		{
-			$user_data['user'] = $this->manage_data->get_userdata();
+			$user_data['user'] = $this->manage_data->get_userdata($this->session->userdata('user_id'));
+			$this->load->view('includes/header');
+			$this->load->view('system_views/user_profile',$user_data);
+			$this->load->view('includes/footer');
+		}
+		else
+		{
+			redirect('login');
+		}
+	}
+	public function edit_user($user_id)
+	{
+		if($this->session->userdata('privilege') == 2 && $this->session->userdata('user_id') != '')
+		{
+			$user_data['user'] = $this->manage_data->get_userdata($user_id);
 			$this->load->view('includes/header');
 			$this->load->view('system_views/user_profile',$user_data);
 			$this->load->view('includes/footer');
@@ -30,8 +45,8 @@ class User_profile extends CI_Controller
 		
 		if($this->session->userdata('privilege') == 2)
 		{
-			$this->form_validation->set_rules('user_name', 'User name', 'required|is_unique[user_data.user_name]');
-			$this->form_validation->set_rules('email_id', 'email id', 'required|valid_email|is_unique[user_data.email_id]');
+			$this->form_validation->set_rules('user_name', 'User name', 'required');
+			$this->form_validation->set_rules('email_id', 'email id', 'required|valid_email');
 		}
 		if($this->input->post('password') != '')
 		{
@@ -47,16 +62,95 @@ class User_profile extends CI_Controller
 
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this->index();
-		}
-		else
-		{
-			$result = $this->manage_data->update_userdata();
-			if($result == true)
+			if($this->session->userdata('privilege') == 2)
+			{
+				$user_id = $this->input->post('edit_user_id');
+				$this->edit_user($user_id);
+			}
+			else if($this->session->userdata('privilege') == 1)
 			{
 				$this->index();
 			}
 		}
+		else 
+		{
+			$result = $this->manage_data->check_Duplicate($this->input->post('edit_user_id'), $this->input->post('user_name'), $this->input->post('email_id'));
+			if($result)
+			{
+				$this->session->set_flashdata('already_exist', 'This user name or email id already exist.');
+
+				if($this->session->userdata('privilege') == 2)
+				{
+					$user_id = $this->input->post('edit_user_id');
+					redirect('user_profile/edit_user/' . $user_id);
+				}
+				else if($this->session->userdata('privilege') == 1)
+				{
+					$this->index();
+				}
+			}
+			else
+			{
+				$user_id = $this->input->post('edit_user_id');
+				$result = $this->manage_data->update_userdata($user_id);
+				if($result == 1)
+				{
+					$this->session->set_flashdata('successful', 'Your data updated successfully.');
+					if($this->session->userdata('privilege') == 2)
+					{
+						$user_id = $this->input->post('edit_user_id');
+						redirect('user_profile/edit_user/' . $user_id);
+					}
+					else if($this->session->userdata('privilege') == 1)
+					{	
+						redirect('user_profile');
+					}
+				}
+			}
+		}
 	}
+	public function update_profile_pic()
+	{
+
+		$user_id = $this->input->post('edit_user_id');
+		if($this->session->userdata('user_id'))
+		{
+  			$config['upload_path'] = "/var/www/ps_system/CodeIgniter/assets/profile_pics/";
+  			$config['allowed_types'] = 'gif|jpg|jpeg|png';
+  			$config['max_size'] = '500';
+			$config['max_width']  = '1024';
+  			$config['max_height']  = '768';
+  			$config['overwrite'] = false;
+  			$this->load->library('upload', $config);
+ 			if ( ! $this->upload->do_upload('profile_pic'))
+  			{
+    			$error = array('error' => $this->upload->display_errors());
+    			$this->session->set_flashdata('error', $error);
+    			$user_data['user'] = $this->manage_data->get_userdata($user_id);
+				$this->load->view('includes/header');
+				$this->load->view('system_views/user_profile',$user_data);
+				$this->load->view('includes/footer');
+ 			}
+ 			else
+       		{   
+       			$upload_data = $this->upload->data(); 
+				$file_name = $upload_data['file_name'];
+    			$result = $this->manage_data->user_pic($user_id, $file_name);
+    			$user_data['user'] = $this->manage_data->get_userdata($user_id);
+				$this->load->view('includes/header');
+				$this->load->view('system_views/user_profile',$user_data);
+				$this->load->view('includes/footer');
+       		}
+     	}
+     	else
+     	{
+     		echo "session not set";
+    		exit;
+     		$user_data['user'] = $this->manage_data->get_userdata($user_id);
+			$this->load->view('includes/header');
+			$this->load->view('system_views/user_profile',$user_data);
+			$this->load->view('includes/footer');
+       	}   
+    }
 }
 ?>
