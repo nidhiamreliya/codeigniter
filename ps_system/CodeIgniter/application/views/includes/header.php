@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.min.js"); ?>"></script>
 		<!-- Include Stylesheet -->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/stylesheet.css"); ?>">
+		<script type="text/javascript" src="<?php echo base_url("assets/js/validate_user.js"); ?>"></script>	
 	</head>
 	<body>
 		

@@ -25,12 +25,12 @@ class Login extends CI_Controller
 		}
 		else
 		{
-			$this->load->model('manage_data', '', TRUE);
 			$user = $this->manage_data->user_login();
-			if($user != FALSE)
+			if($user)
 			{
 				$user_data = array('user_id' => $user['user_id'],'privilege' => $user['privilege']);
 				$this->session->set_userdata($user_data);
+
 				if($this->session->userdata('privilege') == 1)
 				{
 					redirect('user_profile');

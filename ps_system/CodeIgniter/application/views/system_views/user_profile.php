@@ -16,9 +16,16 @@
 		</div>  
 	</div>
 	<!--  Middle Body of the page -->
-	 <div class="row">	
+	 <div class="row">
+	 	<?php
+      		$data = array(
+           			'name'  => 'edit_profile_pic',
+           			'id' => 'edit_profile_pic',
+           			'onsubmit'   => 'check_pic()'
+           	);
+   	 	?>	
 		<!-- Form for update user profile picture -->	
-		<?php echo form_open_multipart('user_profile/update_profile_pic');?>
+		<?php echo form_open_multipart('user_profile/update_profile_pic', $data);?>
 			<div class="text-center form_group col-md-3">
 		       	<img  class="img-rounded profile_pic"  src="<?php echo base_url("assets/profile_pics"). "/" . $user['profile_pic'] ?>" alt="Profile not set">
 		        <h6>Upload a different photo...</h6>
@@ -27,18 +34,34 @@
 				<input type="hidden" name="edit_user_id" id="edit_user_id" value="<?php echo isset($user['user_id'])? $user['user_id'] : ''?>">
 	 			<div class="col-md-12 text-danger">
 	 				<?php 
-					if($this->session->flashdata('error') != '')
-					{ 
-						$message = $this->session->flashdata('error');
-						echo $message['error'];
-					}
+						if($this->session->flashdata('error'))
+						{ 
+							$message = $this->session->flashdata('error');
+							echo $message['error'];
+						}
+					?>
+              	</div>
+              	<div class="col-md-12 text-success">
+	 				<?php 
+						if($this->session->flashdata('success_msg'))
+						{ 
+							$message = $this->session->flashdata('success_msg');
+							echo $message;
+						}
 					?>
               	</div>
 		   	</div>
 		 <?php echo form_close()?>
 			<!-- Form for update user information -->
 			<div class="col-md-6 "> 
-				<?php echo form_open('user_profile/update_profile');?>
+			<?php
+      			$data = array(
+              			'name'  => 'edit_profile',
+              			'id' => 'edit_profile',
+              			'onsubmit'   => 'edit_user()'
+            	);
+   	 		?>
+				<?php echo form_open('user_profile/update_profile', $data);?>
 					<div class="col-md-12 col-md-offset-4">
 					<!-- Print message on successful update of data -->
 						<span class="text-success">

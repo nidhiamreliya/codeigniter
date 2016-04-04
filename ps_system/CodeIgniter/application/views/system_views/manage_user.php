@@ -9,7 +9,7 @@
 				<div class="col-md-3 col-md-offset-3 text-right">
 					<ul class="nav nav-pills">
   						<li role="presentation"><a value="Log out" class="btn-success btn_head" name="logout" href=<?php echo site_url("log_out");?>>Log out</a></li>
-  						<li class="presentation"><a value="My Profile" class="btn-success btn_head"  name="myprofile" href="user_profile.php">My Profile</a></li>
+  						<li class="presentation"><a value="My Profile" class="btn-success btn_head"  name="myprofile" href=<?php echo site_url("user_profile/edit_user") ."/". $this->session->userdata['user_id'];?>>My Profile</a></li>
 					</ul>				
 				</div>
 		    </div> 
@@ -59,6 +59,15 @@
 					if($this->session->flashdata('success_msg') != '')
 					{ 
 						$message = $this->session->flashdata('success_msg');
+						echo $message;
+					}
+				?>
+			</span>
+			<span class="col-md-4 col-md-offset-4 text-center text-info" >
+				<?php 
+					if($this->session->flashdata('error_msg') != '')
+					{ 
+						$message = $this->session->flashdata('error_msg');
 						echo $message;
 					}
 				?>

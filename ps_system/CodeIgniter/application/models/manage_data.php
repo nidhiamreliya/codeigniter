@@ -8,28 +8,35 @@ class Manage_data extends CI_Model
         $this->load->helper('url');
         $this->load->library('session');
     }
+
+    //Inseart user data for register user.
 	public function insert_data()
 	{
+		$password = md5(md5(SALT) + md5($this->input->post('password')));
 		$data = array(
 			'privilege' => 1,
 			'first_name' => $this->input->post('first_name'),
 			'last_name' =>  $this->input->post('last_name'),
 			'user_name' => $this->input->post('user_name'),
 			'email_id' => $this->input->post('email_id'),
-			'password' => $this->input->post('password'),
+			'password' => $password,
 			'address_line1' => $this->input->post('address_line1'),
 			'address_line2' => $this->input->post('address_line2'),
 			'city' => $this->input->post('city'),
 			'zip_code' => $this->input->post('zip_code'),
 			'state' => $this->input->post('state'),
-			'country' => $this->input->post('country')
+			'country' => $this->input->post('country'),
+			'profile_pic' => "default_profile.jpg"
 		);
 		$result = $this->db->insert('user_data', $data);
 		return $this->db->insert_id();
 	}
+
+	//Check user name and password when user login 
 	public function user_login()
 	{
-		$condition = "user_name =" . "'" . $this->input->post('user_name') . "' AND " . "password =" . "'" . $this->input->post('password') . "'";
+		$password = md5(md5(SALT) + md5($this->input->post('password')));
+		$condition = "user_name =" . "'" . $this->input->post('user_name') . "' AND " . "password =" . "'" . $password . "'";
 		$this->db->select('user_id, privilege');
 		$this->db->from('user_data');
 		$this->db->where($condition);
@@ -44,11 +51,15 @@ class Manage_data extends CI_Model
 			return false;
 		}
 	}
+
+	// Get user data who has specific user id
 	public function get_userdata($user_id)
 	{
 		$query = $this->db->get_where('user_data', array('user_id' => $user_id));
 		return $query->row_array();
 	}
+
+	// To update user data.
 	public function update_userdata($user_id)
 	{
 		if($this->session->userdata('privilege') == 2)
@@ -67,10 +78,11 @@ class Manage_data extends CI_Model
 			);
 			if($this->input->post('password') != '')
 			{
-				$data['password'] = $this->input->post('password');
+				$password = md5(md5(SALT) + md5($this->input->post('password')));
+				$data['password'] = $password;
 			}
 		}
-		else if($this->session->userdata('privilege') == 1)
+		if($this->session->userdata('privilege') == 1)
 		{
 			$data = array(
 				'first_name' => $this->input->post('first_name'),
@@ -84,7 +96,8 @@ class Manage_data extends CI_Model
 			);
 			if($this->input->post('password') != '')
 			{
-				$data['password'] = $this->input->post('password');
+				$password = md5(md5(SALT) + md5($this->input->post('password')));
+				$data['password'] = $password;
 			}
 		}
 		$this->db->where('user_id', $user_id);
@@ -98,7 +111,8 @@ class Manage_data extends CI_Model
    			return 	false;
     	}
 	}
-	 //for checking email existance
+
+	//for checking if email or user name already exist.
 	public function check_Duplicate($user_id, $user_name, $email_id) 
 	{
 		$query ="SELECT user_id, user_name, email_id FROM user_data WHERE (user_name = ? OR email_id = ?) AND user_id != ?";
@@ -110,11 +124,11 @@ class Manage_data extends CI_Model
     	} 
     	else 
     	{
-        	return false;
-
+           	return false;
     	}
 	}
 
+	// Retrive all user data from database
 	public function get_allusers()
 	{
 		$condition = "privilege != 2";
@@ -131,25 +145,23 @@ class Manage_data extends CI_Model
 			return false;
 		}
 	} 
+
+	// Delete user as requested by admin.
 	public function delete_user($remove_id)
 	{
-		$this->db->delete('user_data', array('user_id' => $remove_id)); 
+		$result = $this->manage_data->get_userdata($remove_id);
+		if($result['privilege'] == 1)
+		{
+			$this->db->delete('user_data', array('user_id' => $remove_id));
+			return true;
+		}
+		else
+		{
+			return false;
+		} 
 	}
-	function getImage($id)
-	{
- 		$this->session->userdata('is_logged_in');
- 		$query = $this->db->query("SELECT * FROM users WHERE  id ='$id' ");
- 		if($query->num_rows()==0)
- 		{
- 			die("Picture not foun!");
- 		}
- 		else
- 		{
-    		$row = $query->fetch_assoc();
-    		$q = $row['profile_picture'];
-    		return true;
-     	}
-	} 
+	
+	// Inseart profile picture into database.
 	public function user_pic($user_id, $image)
 	{
 		$image_path = array('profile_pic' => $image);

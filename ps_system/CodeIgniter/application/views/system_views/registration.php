@@ -4,9 +4,16 @@
 		<!-- Page header -->
 		<div class="form_head text-center">
 			<h1>Registration Form</h1>
-		</div>	
-		<!-- Registration form -->	
-		<?php echo form_open('registration/validate_user');?>
+		</div>
+		<!-- Registration form -->
+    <?php
+      $data = array(
+              'name'  => 'registration',
+              'id' => 'registration',
+              'onsubmit'   => 'form_validation()'
+            );
+    ?>
+		<?php echo form_open('registration/validate_user', $data);?>
       <div class="form-group">
 				<label for="first name" class="col-md-4 control-label text-right">First name:</label>
 					<div class="col-md-8">

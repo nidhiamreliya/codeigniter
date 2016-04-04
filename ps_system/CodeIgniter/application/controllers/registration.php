@@ -16,8 +16,8 @@ class registration extends CI_Controller
 	public function validate_user()
 	{
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('first_name', 'First name', 'required');
-		$this->form_validation->set_rules('last_name', 'Last name', 'required');
+		$this->form_validation->set_rules('first_name', 'First name', 'required|alpha');
+		$this->form_validation->set_rules('last_name', 'Last name', 'required|alpha');
 		$this->form_validation->set_rules('user_name', 'User name', 'required|is_unique[user_data.user_name]');
 		$this->form_validation->set_rules('email_id', 'email id', 'required|valid_email|is_unique[user_data.email_id]');
 		$this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
