@@ -1,25 +1,35 @@
 <!-- Main body of the page -->
 <div class="container-fluid">
 	<div class="row">	
-			<!-- page header -->
-			<div class="form_head text-center">
-		      	<div class="col-md-4 col-md-offset-1">
-					<h1>Welcome Admin</h1>
-				</div>
-				<div class="col-md-3 col-md-offset-3 text-right">
-					<ul class="nav nav-pills">
-  						<li role="presentation"><a value="Log out" class="btn-success btn_head" name="logout" href=<?php echo site_url("log_out");?>>Log out</a></li>
-  						<li class="presentation"><a value="My Profile" class="btn-success btn_head"  name="myprofile" href=<?php echo site_url("user_profile/edit_user") ."/". $this->session->userdata['user_id'];?>>My Profile</a></li>
-					</ul>				
-				</div>
-		    </div> 
-		</div>
-		<!-- page body -->
-		<div class="row">
-			<div class="col-md-10 col-md-offset-1">
-				<!-- Table header -->
-				<table class="table-striped col-md-12 table-bordered table-responsive">
-						<tr>
+		<!-- page header -->
+		<div class="form_head text-center">
+	   	<div class="col-md-4 col-md-offset-1">
+				<h1>Welcome Admin</h1>
+			</div>
+			<div class="col-md-3 col-md-offset-3 text-right">
+				<ul class="nav nav-pills">
+	  				<li class="presentation"><a value="Log out" class="btn-success btn_head" name="logout" href=<?php echo site_url("log_out");?>>Log out</a></li>
+	  				<li class="presentation"><a value="My Profile" class="btn-success btn_head"  name="myprofile" href=<?php echo site_url("user_profile/edit_user") ."/". $this->session->userdata['user_id'];?>>My Profile</a></li>
+				</ul>				
+			</div>
+		 </div> 
+	</div>
+	<!-- page body -->
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<!-- Table header -->
+			<table class="table-striped col-md-12 table-bordered table-responsive">
+			<?php 
+				if( !$results)
+				{
+			?>
+					<span class="text-info">Sorry there are no records available.</span>
+			<?php
+				}
+				else
+				{
+			?>
+					<tr>
 						<th>First name</th>
 						<th>Last name</th>
 						<th>User name</th>
@@ -31,9 +41,9 @@
 						<th>Country</th>
 						<th>Edit</th>
 						<th>Delete</th>
-						</tr>
+					</tr>
 					<!-- Table data -->
-					<?php foreach ($user_data as $row):?>	
+					<?php foreach ($results as $row):?>	
 						<tr>
 							<td> <?php echo $row->first_name ?> </td>
 							<td> <?php echo $row->last_name ?> </td>
@@ -49,28 +59,40 @@
 							<td> <a onclick="return confirm('Are you sure you want to delete \'<?php echo $row->first_name ?> \'?');" href="<?php echo base_url() ?>index.php/manage_user/delete_user/<?php echo $row->user_id ?>" >Delete</a></td>
 						</tr>
 					<?php endforeach ?>
-				</table>
-			</div>
-		</div>
-		<!-- Print messge on successful delete data. -->  
-		<div class="row">
-			<span class="col-md-4 col-md-offset-4 text-center text-success" >
-				<?php 
-					if($this->session->flashdata('success_msg') != '')
-					{ 
-						$message = $this->session->flashdata('success_msg');
-						echo $message;
-					}
-				?>
-			</span>
-			<span class="col-md-4 col-md-offset-4 text-center text-info" >
-				<?php 
-					if($this->session->flashdata('error_msg') != '')
-					{ 
-						$message = $this->session->flashdata('error_msg');
-						echo $message;
-					}
-				?>
-			</span>
+			<?php } ?>
+			</table>
 		</div>
 	</div>
+	<div class="text-center">
+				<ul class="pagination pagination-md">
+				<!-- Show pagination links -->
+				<?php 
+					foreach ($links as $link) 
+					{
+						echo "<li>". $link."</li>";
+					}
+					?>
+  			</ul>
+  		</div>
+	<!-- Print messge on successful delete data. -->  
+	<div class="row">
+		<span class="col-md-4 col-md-offset-4 text-center text-success" >
+			<?php 
+				if($this->session->flashdata('success_msg') != '')
+				{ 
+					$message = $this->session->flashdata('success_msg');
+					echo $message;
+				}
+			?>
+		</span>
+		<span class="col-md-4 col-md-offset-4 text-center text-info" >
+			<?php 
+				if($this->session->flashdata('error_msg') != '')
+				{ 
+					$message = $this->session->flashdata('error_msg');
+					echo $message;
+				}
+			?>
+		</span>
+	</div>
+</div>

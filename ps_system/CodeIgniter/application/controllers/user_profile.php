@@ -4,36 +4,34 @@ class User_profile extends CI_Controller
 	public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('url','form'));
+        $this->load->helper(array('url','form', 'function_helper'));
         $this->load->library('session');
-        $this->load->model('manage_data', '', TRUE);
+        $this->load->model('data_model', '', TRUE);
+        $this->load->view('includes/header');
+        $this->load->view('includes/footer');
     }
 	public function index()
 	{
-		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege') == 1)
+		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege'))
 		{
-			$user_data['user'] = $this->manage_data->get_userdata($this->session->userdata('user_id'));
-			$this->load->view('includes/header');
+			$user_data['user'] = $this->data_model->get_userdata($this->session->userdata('user_id'));
 			$this->load->view('system_views/user_profile',$user_data);
-			$this->load->view('includes/footer');
 		}
 		else
 		{
-			redirect('log_out');
+			redirect('login');
 		}
 	}
 	public function edit_user($user_id)
 	{
 		if($this->session->userdata('privilege') == 2 && $this->session->userdata('user_id') != '')
 		{
-			$user_data['user'] = $this->manage_data->get_userdata($user_id);
-			$this->load->view('includes/header');
+			$user_data['user'] = $this->data_model->get_userdata($user_id);
 			$this->load->view('system_views/user_profile',$user_data);
-			$this->load->view('includes/footer');
 		}
 		else
 		{
-			redirect('log_out');
+			redirect('login');
 		}
 	}
 	public function update_profile()
@@ -73,33 +71,55 @@ class User_profile extends CI_Controller
 		}
 		else 
 		{
+			$user_id = $this->input->post('edit_user_id');
 			if($this->session->userdata('privilege') == 2)
 			{
 				$user_id = $this->input->post('edit_user_id');
-				$result = $this->manage_data->check_Duplicate($user_id, $this->input->post('user_name'), $this->input->post('email_id'));
+				$result = $this->data_model->check_Duplicate($user_id, $this->input->post('user_name'), $this->input->post('email_id'));
 				if($result)
 				{
-					$this->session->set_flashdata('already_exist', 'This user name or email id already exist.');
+					if($result['user_name'] == $this->input->post('user_name'))
+					{
+						$this->session->set_flashdata('exist_username', 'This user name already exist.');
+					}
+					else
+					{
+						$this->session->set_flashdata('exist_emailid', 'This email_id already exist.');
+					}
+						redirect('user_profile/edit_user/' . $user_id);
+				}
+			}
+			$data = array(
+						'first_name' => $this->input->post('first_name'),
+						'last_name' =>  $this->input->post('last_name'),
+						'address_line1' => $this->input->post('address_line1'),
+						'address_line2' => $this->input->post('address_line2'),
+						'city' => $this->input->post('city'),
+						'zip_code' => $this->input->post('zip_code'),
+						'state' => $this->input->post('state'),
+						'country' => $this->input->post('country')
+			);
+			if($this->input->post('password') != '')
+			{
+				$password = create_password($this->input->post('password'));
+				$data['password'] = $password;
+			}
+			if($this->session->userdata('privilege') == 2)
+			{
+				$data['user_name'] = $this->input->post('user_name');
+				$data['email_id'] = $this->input->post('email_id');
+			}
+			$result = $this->data_model->update_userdata($user_id, $data);
+			if($result)
+			{
+				$this->session->set_flashdata('successful', 'Your data updated successfully.');
+				if($this->session->userdata('privilege') == 2)
+				{
 					redirect('user_profile/edit_user/' . $user_id);
 				}
 				else
 				{
-					$result = $this->manage_data->update_userdata($user_id);
-					if($result)
-					{
-						$this->session->set_flashdata('successful', 'Your data updated successfully.');
-						redirect('user_profile/edit_user/' . $user_id);
-					}
-				}
-			}
-			else if($this->session->userdata('privilege') == 1)
-			{
-				$user_id = $this->session->userdata('user_id');
-				$result = $this->manage_data->update_userdata($user_id);
-				if($result)
-				{
-					$this->session->set_flashdata('successful', 'Your data updated successfully.');
-					redirect('user_profile');
+					redirect('user_profile/index');
 				}
 			}
 		}

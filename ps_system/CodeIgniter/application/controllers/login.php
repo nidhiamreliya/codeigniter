@@ -5,13 +5,13 @@ class Login extends CI_Controller
     {
         parent::__construct();
         $this->load->helper(array('url','form'));
-        $this->load->model('manage_data', '', TRUE);
+        $this->load->model('data_model', '', TRUE);
+        $this->load->view('includes/header');
+        $this->load->view('includes/footer');
     }
 	public function index()
 	{
-		$this->load->view('includes/header');
 		$this->load->view('system_views/login');
-		$this->load->view('includes/footer');
 	}
 	public function check_data()
 	{
@@ -25,7 +25,7 @@ class Login extends CI_Controller
 		}
 		else
 		{
-			$user = $this->manage_data->user_login();
+			$user = $this->data_model->user_login($this->input->post('user_name'), $this->input->post('password'));
 			if($user)
 			{
 				$user_data = array('user_id' => $user['user_id'],'privilege' => $user['privilege']);
@@ -43,9 +43,7 @@ class Login extends CI_Controller
 			else 
 			{
 				$message['err_message'] = 'Invalid user name or password';
-				$this->load->view('includes/header');
 				$this->load->view('system_views/login', $message);
-				$this->load->view('includes/footer');
 			}
 		}
 	}

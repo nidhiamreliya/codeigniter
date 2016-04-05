@@ -4,14 +4,14 @@ class registration extends CI_Controller
 	public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('url','form'));
-        $this->load->model('manage_data', '', TRUE);
+        $this->load->helper(array('url','form', 'function_helper'));
+        $this->load->model('data_model', '', TRUE);
+        $this->load->view('includes/header');
+        $this->load->view('includes/footer');
     }
 	public function index()
 	{
-		$this->load->view('includes/header');
 		$this->load->view('system_views/registration');
-		$this->load->view('includes/footer');
 	}
 	public function validate_user()
 	{
@@ -35,7 +35,23 @@ class registration extends CI_Controller
 		}
 		else
 		{
-			$result = $this->manage_data->insert_data();
+			$password = create_password($this->input->post('password'));
+			$data = array(
+				'privilege' => 1,
+				'first_name' => $this->input->post('first_name'),
+				'last_name' =>  $this->input->post('last_name'),
+				'user_name' => $this->input->post('user_name'),
+				'email_id' => $this->input->post('email_id'),
+				'password' => $password,
+				'address_line1' => $this->input->post('address_line1'),
+				'address_line2' => $this->input->post('address_line2'),
+				'city' => $this->input->post('city'),
+				'zip_code' => $this->input->post('zip_code'),
+				'state' => $this->input->post('state'),
+				'country' => $this->input->post('country'),
+				'profile_pic' => "default_profile.jpg"
+			);
+			$result = $this->data_model->insert_data($data);
 			if($result != null)
 			{
 				$user_data = array('user_id' => $result,'privilege' => 1);
