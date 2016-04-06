@@ -4,51 +4,56 @@ class User_profile extends CI_Controller
 	public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('url','form', 'function_helper'));
-        $this->load->library('session');
-        $this->load->model('data_model', '', TRUE);
-        $this->load->view('includes/header');
-        $this->load->view('includes/footer');
+        $this->load->helper('function_helper');
     }
+
+    //Show user information to user
 	public function index()
 	{
 		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege'))
 		{
 			$user_data['user'] = $this->data_model->get_userdata($this->session->userdata('user_id'));
+			$this->load->view('includes/header');
 			$this->load->view('system_views/user_profile',$user_data);
+			$this->load->view('includes/footer');
 		}
 		else
 		{
 			redirect('login');
 		}
 	}
+
+	//Sow user's information to admin
 	public function edit_user($user_id)
 	{
 		if($this->session->userdata('privilege') == 2 && $this->session->userdata('user_id') != '')
 		{
 			$user_data['user'] = $this->data_model->get_userdata($user_id);
+			$this->load->view('includes/header');
 			$this->load->view('system_views/user_profile',$user_data);
+			$this->load->view('includes/footer');
 		}
 		else
 		{
 			redirect('login');
 		}
 	}
+
+	//Validate user data and upadte information
 	public function update_profile()
 	{
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('first_name', 'First name', 'required|alpha');
-		$this->form_validation->set_rules('last_name', 'Last name', 'required|alpha');
+		$this->form_validation->set_rules('first_name', 'First name', 'trim|required|alpha|xss_clean');
+		$this->form_validation->set_rules('last_name', 'Last name', 'trim|required|alpha|xss_clean');
 		
 		if($this->session->userdata('privilege') == 2)
 		{
-			$this->form_validation->set_rules('user_name', 'User name', 'required');
-			$this->form_validation->set_rules('email_id', 'email id', 'required|valid_email');
+			$this->form_validation->set_rules('user_name', 'User name', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('email_id', 'email id', 'trim|required|valid_email|xss_clean');
 		}
 		if($this->input->post('password') != '')
 		{
-			$this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
-			$this->form_validation->set_rules('confirm_password', 'confirm Password', 'required|matches[password]');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
+			$this->form_validation->set_rules('confirm_password', 'confirm Password', 'trim|required|matches[password]|xss_clean');
 		}
 		$this->form_validation->set_rules('address_line1', 'Address', 'required');
 		$this->form_validation->set_rules('address_line2', 'Address', '');
@@ -124,12 +129,14 @@ class User_profile extends CI_Controller
 			}
 		}
 	}
+
+	//Upadate user's profile picture
 	public function update_profile_pic()
 	{
 		$user_id = $this->input->post('edit_user_id');
 		if($this->session->userdata('user_id'))
 		{
-  			$config['upload_path'] = "/var/www/ps_system/CodeIgniter/assets/profile_pics/";
+  			$config['upload_path'] = FCPATH . "assets/profile_pics/";
   			$config['allowed_types'] = 'gif|jpg|jpeg|png';
   			$config['max_size'] = '1000';
 			$config['max_width']  = '1024';
@@ -155,7 +162,7 @@ class User_profile extends CI_Controller
        			$upload_data = $this->upload->data(); 
 				$file_name = $upload_data['file_name'];
 				$this->session->set_flashdata('success_msg', "Your profile picture updated successfully.");
-    			$result = $this->manage_data->user_pic($user_id, $file_name);
+    			$result = $this->data_model->user_pic($user_id, $file_name);
 				if($this->session->userdata('privilege') == 2)
 				{
 					$user_id = $this->input->post('edit_user_id');

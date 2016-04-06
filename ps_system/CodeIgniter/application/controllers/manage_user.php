@@ -4,18 +4,15 @@ class Manage_user extends CI_Controller
 	public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('url','form'));
-        $this->load->model('data_model', '', TRUE);
         $this->load->library('pagination');
-        $this->load->view('includes/header');
-        $this->load->view('includes/footer');
     }
+
+    //Show all user's information to admin
 	public function index()
 	{
 		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege') == 2)
 		{
-			$config = array();
-			$config["base_url"] = base_url() . "index.php/manage_user/index";
+			$config["base_url"] = base_url("index.php/manage_user/index");
 			$total_row = $this->data_model->record_count();
 			$config["total_rows"] = $total_row;
 			$config["per_page"] = 5;
@@ -38,8 +35,9 @@ class Manage_user extends CI_Controller
 			$data["results"] = $this->data_model->fetch_data($page, $config["per_page"]);
 			$str_links = $this->pagination->create_links();
 			$data["links"] = explode('&nbsp;',$str_links );
-			// View data according to array.
+			 $this->load->view('includes/header');
 			$this->load->view('system_views/manage_user', $data);
+			$this->load->view('includes/footer');
 		}
 		else
 		{

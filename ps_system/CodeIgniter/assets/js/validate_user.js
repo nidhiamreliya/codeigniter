@@ -1,8 +1,8 @@
 // Validate data entered by user in registration form
 function form_validation()
 {
-	var first_name = document.registration.first_name.value;  
-	var last_name = document.registration.last_name.value;  
+	var first_name = document.registration.first_name.value.trim();  
+	var last_name = document.registration.last_name.value.trim();  
 	var email_id = document.registration.email_id.value;  
 	var user_name = document.registration.user_name.value;  
 	var password = document.registration.password.value;
@@ -84,7 +84,7 @@ function form_validation()
 // Validate data entered by user in login form
 function login_check()
 {
-	var user_name = document.login.user_name.value;  
+	var user_name = document.login.user_name.value.trim();  
 	var password = document.login.password.value;
 	if(user_name == "" && password == "")
 	{	
@@ -106,8 +106,8 @@ function login_check()
 // Validate data entered by user in edit profile form
 function edit_user()
 {
-	var first_name = document.edit_profile.first_name.value;  
-	var last_name = document.edit_profile.last_name.value;  
+	var first_name = document.edit_profile.first_name.value.trim();  
+	var last_name = document.edit_profile.last_name.value.trim();  
 	var email_id = document.edit_profile.email_id.value;  
 	var user_name = document.edit_profile.user_name.value;  
 	var password = document.edit_profile.password.value;
