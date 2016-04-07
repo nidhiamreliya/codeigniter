@@ -46,6 +46,7 @@ class Manage_user extends CI_Controller
 	}
 
 	//To delete user.
+	//param: id if user to remove
 	public function delete_user($remove_id)
 	{
 		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege') == 2)
@@ -53,7 +54,7 @@ class Manage_user extends CI_Controller
 			$result = $this->data_model->delete_user($remove_id);
 			if($result)
 			{
-				$this->session->set_flashdata('success_msg', 'One row has been deleted.');
+				$this->session->set_flashdata('success_msg', 'One user has been deleted.');
 				redirect('manage_user');
 			}
 			else

@@ -19,7 +19,7 @@ class Login extends CI_Controller
 	{
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('user_name', 'User name', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -27,7 +27,8 @@ class Login extends CI_Controller
 		}
 		else
 		{
-			$user = $this->data_model->user_login($this->input->post('user_name'), $this->input->post('password'));
+			$password = create_password($this->input->post('password'));
+			$user = $this->data_model->user_login($this->input->post('user_name'), $password);
 			if($user)
 			{
 				$user_data = array('user_id' => $user['user_id'],'privilege' => $user['privilege']);
@@ -44,9 +45,10 @@ class Login extends CI_Controller
 			}
 			else 
 			{
-				$message['err_message'] = 'Invalid user name or password';
+				$data['err_message'] = 'Invalid user name or password.';
+				$data['user'] = $this->input->post('user_name');
 				$this->load->view('includes/header');
-				$this->load->view('system_views/login', $message);
+				$this->load->view('system_views/login', $data);
 				$this->load->view('includes/footer');
 			}
 		}

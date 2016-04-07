@@ -55,7 +55,7 @@
 							<td> <?php echo $row->zip_code ?> </td>
 							<td> <?php echo $row->state ?> </td>
 							<td> <?php echo $row->country ?> </td>
-							<td> <a href="<?php echo base_url() ?>index.php/user_profile/edit_user/<?php echo $row->user_id ?>">Edit</a></td>
+							<td> <a href="<?php echo base_url() ?>user_profile/edit_user/<?php echo $row->user_id ?>">Edit</a></td>
 							<td> <a onclick="return confirm('Are you sure you want to delete \'<?php echo $row->first_name ?> \'?');" href="<?php echo base_url() ?>index.php/manage_user/delete_user/<?php echo $row->user_id ?>" >Delete</a></td>
 						</tr>
 					<?php endforeach ?>

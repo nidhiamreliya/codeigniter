@@ -32,6 +32,13 @@ function form_validation()
 			document.registration.last_name.focus();  
 			return false;  
 		}
+		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;  
+		if( ! email_id.match(mailformat))  
+		{  
+			alert("You have entered an invalid email address!");  
+			document.registration.email_id.focus();  
+			return false;  
+		}
 		if (! city.match(letters))  
 		{  
 			alert("Invalid city name");
@@ -50,13 +57,7 @@ function form_validation()
 			document.registration.country.focus();  
 			return false;  
 		}        
-		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;  
-		if( ! email_id.match(mailformat))  
-		{  
-			alert("You have entered an invalid email address!");  
-			document.registration.email_id.focus();  
-			return false;  
-		}
+		
 		if (password.length < 6) 
 		{
 		  	alert('Please enter at least 6 characters in password');  

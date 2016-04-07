@@ -24,18 +24,20 @@ class data_model extends CI_Model
 	*/
 	public function user_login($user_name, $password)
 	{
-		$password = create_password($password);
 		$query = $this->db
 				->select('user_id, privilege')
 				->from('user_data')
-			    ->where('user_name',$user_name)
+			    ->where('user_name', $user_name)
+			    ->where('password', $password)
 			    ->or_where('email_id', $user_name)
 			    ->where('password', $password)
 			   	->get();
 
-		if ($query->num_rows() == 1) 
+    	$result = $query->row_array();
+
+		if ($result) 
 		{
-			return $query->row_array();
+			return $result;
 		} 
 		else 
 		{
@@ -81,11 +83,13 @@ class data_model extends CI_Model
 	*/
 	public function check_Duplicate($user_id, $user_name, $email_id) 
 	{
-		$condition = "(user_name ='" .$user_name. "' OR email_id ='" .$email_id. "') AND user_id !='" .$user_id. "'";
 		$query = $this->db
 				->select('user_id, user_name, email_id')
 				->from('user_data')
-			    ->where($condition)
+			    ->where('user_name', $user_name)
+			    ->where('user_id !=', $user_id)
+			    ->or_where('email_id', $email_id)
+			   	->where('user_id !=', $user_id)
 			   	->get();
 
     	$result = $query->row_array();

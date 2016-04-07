@@ -4,7 +4,6 @@ class registration extends CI_Controller
 	public function __construct()
     {
         parent::__construct();
-        $this->load->helper('function_helper');
     }
 
     //Display registration form
@@ -39,20 +38,20 @@ class registration extends CI_Controller
 		{
 			$password = create_password($this->input->post('password'));
 			$data = array(
-				'privilege' => 1,
-				'first_name' => $this->input->post('first_name'),
-				'last_name' =>  $this->input->post('last_name'),
-				'user_name' => $this->input->post('user_name'),
-				'email_id' => $this->input->post('email_id'),
-				'password' => $password,
-				'address_line1' => $this->input->post('address_line1'),
-				'address_line2' => $this->input->post('address_line2'),
-				'city' => $this->input->post('city'),
-				'zip_code' => $this->input->post('zip_code'),
-				'state' => $this->input->post('state'),
-				'country' => $this->input->post('country'),
-				'profile_pic' => "default_profile.jpg"
-			);
+					'privilege' => 1,
+					'first_name' => $this->input->post('first_name'),
+					'last_name' =>  $this->input->post('last_name'),
+					'user_name' => $this->input->post('user_name'),
+					'email_id' => $this->input->post('email_id'),
+					'password' => $password,
+					'address_line1' => $this->input->post('address_line1'),
+					'address_line2' => $this->input->post('address_line2'),
+					'city' => $this->input->post('city'),
+					'zip_code' => $this->input->post('zip_code'),
+					'state' => $this->input->post('state'),
+					'country' => $this->input->post('country'),
+					'profile_pic' => "default_profile.jpg"
+				);
 			$result = $this->data_model->insert_data($data);
 			if($result != null)
 			{

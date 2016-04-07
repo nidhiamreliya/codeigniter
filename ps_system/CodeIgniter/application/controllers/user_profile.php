@@ -4,7 +4,6 @@ class User_profile extends CI_Controller
 	public function __construct()
     {
         parent::__construct();
-        $this->load->helper('function_helper');
     }
 
     //Show user information to user
@@ -24,6 +23,7 @@ class User_profile extends CI_Controller
 	}
 
 	//Sow user's information to admin
+	//param: id of user to edit
 	public function edit_user($user_id)
 	{
 		if($this->session->userdata('privilege') == 2 && $this->session->userdata('user_id') != '')

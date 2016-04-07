@@ -10,7 +10,7 @@
 	    $data = array(
 	            'name'  => 'registration',
 	            'id' => 'registration',
-	            'onsubmit'   => 'form_validation()'
+	            'onsubmit'   => 'return form_validation()'
 	          );
 	  ?>
 		<?php echo form_open('registration/validate_user', $data);?>
@@ -20,7 +20,8 @@
         </div>
         <div class="col-md-8">
           <?php 
-            $data = input_array('first_name', 'first_name', "col-md-8 form-control", "First name");
+            $data = input_array('first_name', 'first_name', 'col-md-8 form-control', 'First name');
+             $data['value'] = set_value('first_name');
             echo form_input($data);
           ?>
           <label class="col-md-8 has-error error_class">
@@ -34,7 +35,8 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('last_name', 'last_name', "col-md-8 form-control", 'Last name');       
+            $data = input_array('last_name', 'last_name', 'col-md-8 form-control', 'Last name');       
+            $data['value'] = set_value('last_name');
             echo form_input($data);
           ?>
           <label class="col-md-8 error_class">
@@ -48,7 +50,8 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('email_id', 'email_id', "col-md-8 form-control", 'Example@Email.com');       
+            $data = input_array('email_id', 'email_id', 'col-md-8 form-control', 'Example@Email.com');       
+             $data['value'] = set_value('email_id');
             echo form_input($data);
           ?>
           <label class="col-md-8 error_class">
@@ -62,7 +65,8 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('user_name', 'user_name', "col-md-8 form-control", "User name");
+            $data = input_array('user_name', 'user_name', 'col-md-8 form-control', 'User name');
+            $data['value'] = set_value('user_name');
             echo form_input($data);
           ?>
 	        <label class="col-md-8 error_class">
@@ -76,7 +80,7 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('password', 'password', "col-md-8 form-control", "Password");
+            $data = input_array('password', 'password', 'col-md-8 form-control', 'Password');
             echo form_password($data);
           ?>
           <label class="col-md-8 error_class">
@@ -90,7 +94,7 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('confirm_password', 'confirm_password', "col-md-8 form-control", "Confirm Password");
+            $data = input_array('confirm_password', 'confirm_password', 'col-md-8 form-control', 'Confirm Password');
             echo form_password($data);
           ?>
           <label class="col-md-8 error_class">
@@ -104,7 +108,8 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('address_line1', 'address_line1', "col-md-8 form-control", "Address line1");  
+            $data = input_array('address_line1', 'address_line1', 'col-md-8 form-control', 'Address line1');  
+            $data['value'] = set_value('address_line1');
             echo form_input($data);
           ?>
           <label class="col-md-8 error_class">
@@ -115,7 +120,8 @@
     	<div class="form-group">
     		<div class="col-md-8 col-md-offset-4">
           <?php
-            $data = input_array('address_line2', 'address_line2', "col-md-8 form-control", "Address line2");
+            $data = input_array('address_line2', 'address_line2', 'col-md-8 form-control', 'Address line2');
+            $data['value'] = set_value('address_line2');
             echo form_input($data);
           ?>
           <label class="col-md-8 error_class">
@@ -129,7 +135,8 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('city', 'city', "col-md-8 form-control", "City"); 
+            $data = input_array('city', 'city', 'col-md-8 form-control', 'City'); 
+            $data['value'] = set_value('city');
             echo form_input($data);
           ?>
         <label class="col-md-8 error_class">
@@ -142,7 +149,8 @@
         </div>
         <div class="col-md-8 ">
           <?php
-            $data = input_array('zip_code', 'zip_code', "col-md-8 form-control", "Zip code");    
+            $data = input_array('zip_code', 'zip_code', 'col-md-8 form-control', 'Zip code');    
+            $data['value'] = set_value('zip_code');
             echo form_input($data);
           ?>
           <label class="col-md-8 error_class">
@@ -156,7 +164,8 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('state', 'state', "col-md-8 form-control", "State");   
+            $data = input_array('state', 'state', 'col-md-8 form-control', 'State');   
+            $data['value'] = set_value('state');
             echo form_input($data);
           ?>
           <label class="col-md-8 error_class">
@@ -170,7 +179,8 @@
         </div>
         <div class="col-md-8">
           <?php
-            $data = input_array('country', 'country', "col-md-8 form-control", "Country");
+            $data = input_array('country', 'country', 'col-md-8 form-control', 'Country');
+            $data['value'] = set_value('country');
             echo form_input($data);
           ?>
           <label class="col-md-8 error_class">
