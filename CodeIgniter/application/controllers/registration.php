@@ -1,5 +1,5 @@
 <?php
-class registration extends CI_Controller 
+class registration extends MY_Controller
 {
 	public function __construct()
     {
@@ -9,9 +9,7 @@ class registration extends CI_Controller
     //Display registration form
 	public function index()
 	{
-		$this->load->view('includes/header');
-		$this->load->view('system_views/registration');
-		$this->load->view('includes/footer');
+		$this->views('system_views/registration', null);
 	}
 
 	//Validate user data and insert data into database

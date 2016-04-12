@@ -1,5 +1,5 @@
 <?php
-class User_profile extends CI_Controller 
+class User_profile extends MY_Controller
 {
 	public function __construct()
     {
@@ -12,9 +12,7 @@ class User_profile extends CI_Controller
 		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege'))
 		{
 			$user_data['user'] = $this->data_model->get_userdata($this->session->userdata('user_id'));
-			$this->load->view('includes/header');
-			$this->load->view('system_views/user_profile',$user_data);
-			$this->load->view('includes/footer');
+			$this->views('system_views/user_profile',$user_data);
 		}
 		else
 		{
@@ -22,26 +20,22 @@ class User_profile extends CI_Controller
 		}
 	}
 
-	//Sow user's information to admin
-	//param: id of user to edit
+	//Show user's information to admin
+	//@params int $user_id id of user to edit
 	public function edit_user($user_id)
 	{
 		if($this->session->userdata('privilege') == 2 && $this->session->userdata('user_id') != '')
 		{
-
 			$user_data['user'] = $this->data_model->get_userdata($user_id);
 			if($user_data['user'])
 			{
-				$this->load->view('includes/header');
-				$this->load->view('system_views/user_profile',$user_data);
-				$this->load->view('includes/footer');
+				$this->views('system_views/user_profile',$user_data);
 			}
 			else
 			{
 				$this->session->set_flashdata('error_msg', 'Sorry this user not exist.');
 				redirect('manage_user');
-			}
-			
+			}	
 		}
 		else
 		{
@@ -113,7 +107,7 @@ class User_profile extends CI_Controller
 						'zip_code' => $this->input->post('zip_code'),
 						'state' => $this->input->post('state'),
 						'country' => $this->input->post('country')
-			);
+					);
 			if($this->input->post('password') != '')
 			{
 				$password = create_password($this->input->post('password'));

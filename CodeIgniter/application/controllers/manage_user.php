@@ -1,5 +1,5 @@
 <?php
-class Manage_user extends CI_Controller 
+class Manage_user extends MY_Controller
 {
 	public function __construct()
     {
@@ -13,7 +13,6 @@ class Manage_user extends CI_Controller
 		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege') == 2)
 		{
 			$values = $this->config->config;
-			
 			$values["base_url"] = base_url("/manage_user/index");
 			$total_row = $this->data_model->record_count();
 			$values["total_rows"] = $total_row;
@@ -25,17 +24,26 @@ class Manage_user extends CI_Controller
 			{
 				$page = ($page_no-1) * $values["per_page"];
 			}
+			else if($page_no > $values['num_links'])
+			{
+				$page = ($values['num_links']-1) * $values["per_page"];
+			}
 			else
 			{
 				$page = 1;
 			}
 
 			$data["results"] = $this->data_model->fetch_data($page, $values["per_page"]);
-			$str_links = $this->pagination->create_links();
-			$data["links"] = explode('&nbsp;',$str_links );
-			$this->load->view('includes/header');
-			$this->load->view('system_views/manage_user', $data);
-			$this->load->view('includes/footer');
+			if($data)
+			{
+				$str_links = $this->pagination->create_links();
+				$data["links"] = explode('&nbsp;',$str_links );
+			}
+			else
+			{
+				$data["links"] = "sorry no data available.";
+			}
+			$this->views('system_views/manage_user', $data);
 		}
 		else
 		{

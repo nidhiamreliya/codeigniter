@@ -1,5 +1,5 @@
 <?php
-class Login extends CI_Controller 
+class Login extends MY_Controller 
 {
 	public function __construct()
     {
@@ -9,15 +9,12 @@ class Login extends CI_Controller
     //Show login form
 	public function index()
 	{
-		$this->load->view('includes/header');
-		$this->load->view('system_views/login');
-		$this->load->view('includes/footer');
+		$this->views('system_views/login', null);
 	}
 
 	//Validate user data
 	public function check_data()
 	{
-		$this->load->library('form_validation');
 		$this->form_validation->set_rules('user_name', 'User name', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		
@@ -48,9 +45,8 @@ class Login extends CI_Controller
 			{
 				$data['err_message'] = 'Invalid user name or password.';
 				$data['user'] = $this->input->post('user_name');
-				$this->load->view('includes/header');
-				$this->load->view('system_views/login', $data);
-				$this->load->view('includes/footer');
+				
+				$this->views('system_views/login', $data);
 			}
 		}
 	}

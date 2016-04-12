@@ -8,8 +8,8 @@ class data_model extends CI_Model
     }
 
     /*Inseart user data for register user.
-     *Param: array of data entered by user
-     *Return: id of registerd user
+     *@params array $data data entered by user
+     *@return int user id
 	*/
 	public function insert_data($data)
 	{
@@ -18,9 +18,9 @@ class data_model extends CI_Model
 	}
 
 	/*Check user data and retrive user data from database.
-     *Param: user name or email id entered by user
-     *Param: password entered by user
-     *Return: array of user information
+     *@params string $user_name user name or email_id 
+     *@params string $password 
+     *@returns array row
 	*/
 	public function user_login($user_name, $password)
 	{
@@ -33,11 +33,9 @@ class data_model extends CI_Model
 			    ->where('password', $password)
 			   	->get();
 
-    	$result = $query->row_array();
-
-		if ($result) 
+		if ($query->num_rows() > 0) 
 		{
-			return $result;
+			return $query->row_array();
 		} 
 		else 
 		{
@@ -46,9 +44,9 @@ class data_model extends CI_Model
 	}
 
 	/*Retrive user information stored in database
-     *Param: id of user
-     *Return: array of user information
-	*/
+     *@params int id
+     *@return array row
+    */
 	public function get_userdata($user_id)
 	{
 		$query = $this->db->get_where('user_data', array('user_id' => $user_id));
@@ -64,9 +62,9 @@ class data_model extends CI_Model
 	}
 
 	/*To update user data.
-	 *Param: id of user
-	 *Param: array of data with updated information
-     *Return: return true on successful update
+	 *@params int $user_id
+	 *@params array $data updated information
+     *@return: bool 
 	*/
 	public function update_userdata($user_id, $data)
 	{
@@ -84,10 +82,10 @@ class data_model extends CI_Model
 	}
 
 	/*For checking if email or user name already exist.
-	 *Param: id of user
-	 *Param: user name entered by user
-	 *Param: email id entered by user
-     *Return: array of user information
+	 *@params int user_id
+	 *@params string user_name
+	 *@params string email id
+     *@return array row
 	*/
 	public function check_Duplicate($user_id, $user_name, $email_id) 
 	{
@@ -112,7 +110,7 @@ class data_model extends CI_Model
 	}
 
 	/*Count total records
-     *Return: total users in database
+     *@return int total users in database
     */
     public function record_count() 
     {
@@ -124,9 +122,9 @@ class data_model extends CI_Model
 	}
 
 	/*Fetch data according to per_page limit.
-	 *Param: start limit 
-	 *Param: number of record to retrive
-     *Return: array of information
+	 *@params int $page page no 
+	 *@params int $limit no of record to retrive
+     *@return array rows
 	*/
 	public function fetch_data($page, $limit) 
 	{
@@ -148,8 +146,8 @@ class data_model extends CI_Model
 	}
 
 	/*Delete user as requested by admin.
-	 *Param: id of user to remove
-     *Return: return true on successful delete of row
+	 *@params int $remove_id id of user to remove
+     *@return bool
 	*/
 	public function delete_user($remove_id)
 	{
@@ -160,21 +158,18 @@ class data_model extends CI_Model
 				->get();
 
 		$result = $query->row_array(); 
-		if($result['privilege'] == 1)
-		{
+		if($result['privilege'] == 1) {
 			$this->db->delete('user_data', array('user_id' => $remove_id));
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		} 
 	}
 	
 	/*Inseart profile picture path into database.
-	 *Param: id of user
-	 *Param: image path
-     *Return: true on successful taransection
+	 *@params int $user_id 
+	 *@params string $image image path
+     *@return bool
 	*/
 	public function user_pic($user_id, $image)
 	{

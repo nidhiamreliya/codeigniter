@@ -117,7 +117,8 @@ function edit_user()
 	var city = document.edit_profile.city.value;   
 	var zip_code = document.edit_profile.zip_code.value;  
 	var state = document.edit_profile.state.value;
-	var country = document.edit_profile.country.value;      
+	var country = document.edit_profile.country.value;
+	      
 	if (first_name == "" || last_name == "" || email_id == "" || user_name == "" || address_line1 == "" || city == "" || zip_code == "" || state == "" || country == "")
 	{
 		alert ( "There are some empty fiels. Please fill all required fields." );
