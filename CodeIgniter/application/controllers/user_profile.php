@@ -11,7 +11,7 @@ class User_profile extends MY_Controller
 	{
 		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege'))
 		{
-			$user_data['user'] = $this->data_model->get_userdata($this->session->userdata('user_id'));
+			$user_data['user'] = $this->user_model->get_userdata($this->session->userdata('user_id'));
 			$this->views('system_views/user_profile',$user_data);
 		}
 		else
@@ -26,7 +26,7 @@ class User_profile extends MY_Controller
 	{
 		if($this->session->userdata('privilege') == 2 && $this->session->userdata('user_id') != '')
 		{
-			$user_data['user'] = $this->data_model->get_userdata($user_id);
+			$user_data['user'] = $this->user_model->get_userdata($user_id);
 			if($user_data['user'])
 			{
 				$this->views('system_views/user_profile',$user_data);
@@ -46,9 +46,6 @@ class User_profile extends MY_Controller
 	//Validate user data and upadte information
 	public function update_profile()
 	{
-		$this->form_validation->set_rules('first_name', 'First name', 'trim|required|alpha|xss_clean');
-		$this->form_validation->set_rules('last_name', 'Last name', 'trim|required|alpha|xss_clean');
-		
 		if($this->session->userdata('privilege') == 2)
 		{
 			$this->form_validation->set_rules('user_name', 'User name', 'trim|required|xss_clean');
@@ -59,14 +56,8 @@ class User_profile extends MY_Controller
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
 			$this->form_validation->set_rules('confirm_password', 'confirm Password', 'trim|required|matches[password]|xss_clean');
 		}
-		$this->form_validation->set_rules('address_line1', 'Address', 'required');
-		$this->form_validation->set_rules('address_line2', 'Address', '');
-		$this->form_validation->set_rules('city', 'City', 'required');
-		$this->form_validation->set_rules('zip_code', 'Zip code', 'required|exact_length[6]|numeric');
-		$this->form_validation->set_rules('state', 'State', 'required');
-		$this->form_validation->set_rules('country', 'Country', 'required');
-
-		if ($this->form_validation->run() == FALSE)
+		
+		if ($this->form_validation->run('check_user') == FALSE)
 		{
 			if($this->session->userdata('privilege') == 2)
 			{
@@ -84,7 +75,7 @@ class User_profile extends MY_Controller
 			if($this->session->userdata('privilege') == 2)
 			{
 				$user_id = $this->input->post('edit_user_id');
-				$result = $this->data_model->check_Duplicate($user_id, $this->input->post('user_name'), $this->input->post('email_id'));
+				$result = $this->user_model->check_Duplicate($user_id, $this->input->post('user_name'), $this->input->post('email_id'));
 				if($result)
 				{
 					if($result['user_name'] == $this->input->post('user_name'))
@@ -118,7 +109,7 @@ class User_profile extends MY_Controller
 				$data['user_name'] = $this->input->post('user_name');
 				$data['email_id'] = $this->input->post('email_id');
 			}
-			$result = $this->data_model->update_userdata($user_id, $data);
+			$result = $this->user_model->update_userdata($user_id, $data);
 			if($result)
 			{
 				$this->session->set_flashdata('successful', 'Your data updated successfully.');
@@ -162,7 +153,7 @@ class User_profile extends MY_Controller
        		{   
        			$upload_data = $this->upload->data(); 
 				$file_name = $upload_data['file_name'];
-				$result = $this->data_model->user_pic($user_id, $file_name);
+				$result = $this->user_model->user_pic($user_id, $file_name);
 				image_thumb( 'assets/profile_pics/' . $file_name);
 				
 				$this->session->set_flashdata('success_msg', "Your profile picture updated successfully.");

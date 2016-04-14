@@ -65,7 +65,7 @@
    			$data = array(
          			'name'  => 'edit_profile',
          			'id' => 'edit_profile',
-         			'onsubmit'   => 'return edit_user()'
+         			//'onsubmit'   => 'return edit_user()'
             );
    	 	?>
 			<?php echo form_open('user_profile/update_profile', $data);?>

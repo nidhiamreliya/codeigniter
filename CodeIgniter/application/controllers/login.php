@@ -15,9 +15,6 @@ class Login extends MY_Controller
 	//Validate user data
 	public function check_data()
 	{
-		$this->form_validation->set_rules('user_name', 'User name', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required');
-		
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->index();
@@ -25,7 +22,7 @@ class Login extends MY_Controller
 		else
 		{
 			$password = create_password($this->input->post('password'));
-			$user = $this->data_model->user_login($this->input->post('user_name'), $password);
+			$user = $this->user_model->user_login($this->input->post('user_name'), $password);
 			
 			if($user)
 			{

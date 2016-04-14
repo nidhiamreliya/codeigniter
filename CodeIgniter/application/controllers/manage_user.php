@@ -14,7 +14,7 @@ class Manage_user extends MY_Controller
 		{
 			$values = $this->config->config;
 			$values["base_url"] = base_url("/manage_user/index");
-			$total_row = $this->data_model->record_count();
+			$total_row = $this->user_model->record_count();
 			$values["total_rows"] = $total_row;
 			$values['num_links'] = ceil($total_row/$values["per_page"]);
 
@@ -33,7 +33,7 @@ class Manage_user extends MY_Controller
 				$page = 1;
 			}
 
-			$data["results"] = $this->data_model->fetch_data($page, $values["per_page"]);
+			$data["results"] = $this->user_model->fetch_data($page, $values["per_page"]);
 			if($data)
 			{
 				$str_links = $this->pagination->create_links();
@@ -57,7 +57,7 @@ class Manage_user extends MY_Controller
 	{
 		if($this->session->userdata('user_id') != null &&  $this->session->userdata('privilege') == 2)
 		{
-			$result = $this->data_model->delete_user($remove_id);
+			$result = $this->user_model->delete_user($remove_id);
 			if($result)
 			{
 				$this->session->set_flashdata('success_msg', 'One user has been deleted.');
